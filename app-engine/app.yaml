@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-service: jony-demo
+service: sela-demo-5
 runtime: python
 env: flex
 entrypoint: gunicorn -b :$PORT main:app

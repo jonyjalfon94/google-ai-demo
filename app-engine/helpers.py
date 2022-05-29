@@ -29,6 +29,9 @@ class StorageHelpers():
       if isinstance(asset, str):
         uploaded_asset_name = asset
         blob.upload_from_filename(asset, content_type=content_type)
+      elif isinstance(asset, bytes):
+        uploaded_asset_name = blob_name
+        blob.upload_from_string(asset, content_type=content_type)
       else:
         uploaded_asset_name = asset.filename
         blob.upload_from_string(asset.read(), content_type=asset.content_type)
