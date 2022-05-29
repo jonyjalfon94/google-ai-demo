@@ -147,6 +147,27 @@ def translate_text(file_name, target_lang):
     # Generate meme with translated text
     memefy(file_name, translated_text['translatedText'])
 
+def get_voice(caption_language):
+    if caption_language == "fr":
+        voice = tts.VoiceSelectionParams(language_code="fr-FR", ssml_gender=tts.SsmlVoiceGender.FEMALE)
+        return voice
+    elif caption_language == "ru":
+        voice = tts.VoiceSelectionParams(language_code="ru-RU", ssml_gender=tts.SsmlVoiceGender.MALE)
+        return voice
+    elif caption_language == "es":
+        voice = tts.VoiceSelectionParams(language_code="es-ES", ssml_gender=tts.SsmlVoiceGender.FEMALE)
+        return voice
+    elif caption_language == "it":
+        voice = tts.VoiceSelectionParams(language_code="it-IT", ssml_gender=tts.SsmlVoiceGender.MALE)
+        return voice
+    elif caption_language == "iw":
+        voice = tts.VoiceSelectionParams(language_code="en-US", ssml_gender=tts.SsmlVoiceGender.NEUTRAL)
+        return voice
+    # In case the language doesn't match any of the above, chose an english voice
+    else:
+        voice = tts.VoiceSelectionParams(language_code="en-US", ssml_gender=tts.SsmlVoiceGender.NEUTRAL)
+        return voice
+
 # Converts text to an mp3 file using Text to Speech API
 def text_to_mp3(blob_name):
     # Get the image caption from its Datastore entity
@@ -155,24 +176,15 @@ def text_to_mp3(blob_name):
     # Prepare text to speech input
     synthesis_input = tts.SynthesisInput(text=entity['caption'])
     # Set voice parameters depending on caption language
-    if entity["caption_language"] == "fr":
-        voice = tts.VoiceSelectionParams(language_code="fr-FR", ssml_gender=tts.SsmlVoiceGender.FEMALE)
-    elif entity["caption_language"] == "ru":
-        voice = tts.VoiceSelectionParams(language_code="ru-RU", ssml_gender=tts.SsmlVoiceGender.MALE)
-    elif entity["caption_language"] == "es":
-        voice = tts.VoiceSelectionParams(language_code="es-ES", ssml_gender=tts.SsmlVoiceGender.FEMALE)
-    elif entity["caption_language"] == "it":
-        voice = tts.VoiceSelectionParams(language_code="it-IT", ssml_gender=tts.SsmlVoiceGender.MALE)
-    elif entity["caption_language"] == "iw":
+    if entity["caption_language"] == "iw":
         synthesis_input = tts.SynthesisInput(text="Sorry, hebrew has no supported voice yet. Try translating again to any of the other languages and press the button again.")
-        voice = tts.VoiceSelectionParams(language_code="en-US", ssml_gender=tts.SsmlVoiceGender.NEUTRAL)
-    # In case the language doesn't match any of the above, chose an english voice
-    else:
-        voice = tts.VoiceSelectionParams(language_code="en-US", ssml_gender=tts.SsmlVoiceGender.NEUTRAL)
     # Set file format for the response
     audio_config = tts.AudioConfig(
         audio_encoding=tts.AudioEncoding.MP3
     )
+    # Get the voice parameters
+    caption_language = entity["caption_language"]
+    voice = get_voice(caption_language=caption_language)
     # Get mp3 file from TTS API
     response = tts_client.synthesize_speech(
         input=synthesis_input, voice=voice, audio_config=audio_config
