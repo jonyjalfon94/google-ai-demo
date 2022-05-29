@@ -30,7 +30,7 @@ app = Flask(__name__)
 def homepage():
     # Use the Cloud Datastore client to fetch information from Datastore about
     # each photo.
-    query = datastore_client.query(kind="Faces")
+    query = datastore_client.query(kind="Memes")
     image_entities = list(query.fetch())
     # Return a Jinja2 HTML template and pass in image_entities as a parameter.
     return render_template("homepage.html", image_entities=image_entities, form_error=False)  
@@ -41,7 +41,7 @@ def upload_photo():
     photo = request.files["file"]
     blob = helpers.upload_asset_to_bucket(photo, photo.filename, content_type="image/jpeg")
     # The kind for the new entity.
-    kind = "Faces"
+    kind = "Memes"
     # Create the Cloud Datastore key for the new entity.
     key = datastore_client.key(kind, photo.filename)
     # Construct the new entity using the key. Set dictionary values for entity
@@ -66,11 +66,11 @@ def process():
     elif request.form['action'] == 'Vision API Caption':
         generate_image_caption(blob_name)
     # Get datastore entity for image
-    key = datastore_client.key('Faces', blob_name)
+    key = datastore_client.key("Memes", blob_name)
     entity = datastore_client.get(key)
     # Return an error if the image selected has no caption
     if "caption" not in entity:
-        query = datastore_client.query(kind="Faces")
+        query = datastore_client.query(kind="Memes")
         image_entities = list(query.fetch())
         return render_template("homepage.html", image_entities=image_entities, form_error="The image you selected does not have a caption. Please add a caption and try again.")
     if request.form['action'] == 'Translate':
@@ -96,7 +96,7 @@ def getQuotes(keyword):
             quoteArray.append(quote)
     return quoteArray
 
-# Detects faces using Google cloud vision API, draws a box around them and calculates the total "joy" of the image
+# Generate image caption using Google Vision API for collecting labels and taking a quote from brainyquote.com
 def generate_image_caption(blob_name):
     # Download original image
     original_image_blob = helpers.download_asset_from_bucket(blob_name)
@@ -126,7 +126,7 @@ def memefy(file_name, caption):
   upload_image_blob = "processed/" + original_image_blob.name
   meme_blob = helpers.upload_asset_to_bucket("captioned_image.jpg", upload_image_blob, content_type="image/jpeg")
   # Update image entity from datastore
-  key = datastore_client.key("Faces", file_name)
+  key = datastore_client.key("Memes", file_name)
   entity = datastore_client.get(key)
   for prop in entity:
       entity[prop] = entity[prop]
@@ -139,7 +139,7 @@ def memefy(file_name, caption):
 # Translates text into the target language using Google cloud translate API
 def translate_text(file_name, target_lang):
     # Get datastore entity for image
-    key = datastore_client.key('Faces', file_name)
+    key = datastore_client.key("Memes", file_name)
     entity = datastore_client.get(key)
     target = target_lang
     # Use Google translate API to translate caption into target language
@@ -150,7 +150,7 @@ def translate_text(file_name, target_lang):
 # Converts text to an mp3 file using Text to Speech API
 def text_to_mp3(blob_name):
     # Get the image caption from its Datastore entity
-    key = datastore_client.key('Faces', blob_name)
+    key = datastore_client.key("Memes", blob_name)
     entity = datastore_client.get(key)
     # Prepare text to speech input
     synthesis_input = tts.SynthesisInput(text=entity['caption'])
