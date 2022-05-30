@@ -13,8 +13,6 @@ The demo "Meme Generator" application stores images and allows the user to gener
 
 The demo application is hosted using [Google App Engine](https://cloud.google.com/appengine).
 
-
-
 ## Setup
 
 Create a new project with the [Google Cloud Platform console](https://console.cloud.google.com/).
@@ -47,7 +45,7 @@ Run the following command to clone the Github repository:
 
 Change directory to the sample code location:
 
-    cd python-docs-samples/codelabs/flex_and_vision
+    cd google-ai-demo/app-engine
 
 ## Authentication
 
