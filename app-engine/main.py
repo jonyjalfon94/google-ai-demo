@@ -9,6 +9,7 @@ import google.cloud.texttospeech as tts
 from memefy import Meme
 from helpers import StorageHelpers
 import requests
+from requests.structures import CaseInsensitiveDict
 from bs4 import BeautifulSoup
 
 
@@ -103,11 +104,24 @@ def generate_image_caption(blob_name):
     # Send original image to vision API
     image = vision.Image(source=vision.ImageSource(image_uri=original_image_blob.public_url))
     quotes = []
-    while quotes == []:
+    for i in range(3):
         labels = vision_client.label_detection(image=image).label_annotations
         for label in labels:
             #Get quotes from the brainyquote.com for each label
             quotes.extend(getQuotes(label.description))
+        if  len(quotes) > 0:
+            break
+        if i == 2 and len(quotes) == 0:
+            print(i)
+            for label in labels:
+                #Get quotes from icanhazdadjoke.com instead
+                headers = CaseInsensitiveDict()
+                headers["Accept"] = "application/json"
+                jokes = requests.get(f"https://icanhazdadjoke.com/search?term={label.description}", headers=headers).json()["results"]
+                for joke in jokes:
+                    if len(joke["joke"]) < 80:
+                        print(joke["joke"])
+                        quotes.append(joke["joke"])
     memefy(blob_name, random.choice(quotes))
 
 # Uses PIL to write a caption on top of the image

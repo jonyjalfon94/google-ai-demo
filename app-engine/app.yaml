@@ -21,4 +21,4 @@ runtime_config:
   python_version: 3.7
 
 env_variables:
-  CLOUD_STORAGE_BUCKET: jony-uploaded-images 
+  CLOUD_STORAGE_BUCKET: <PROJECT_ID>
