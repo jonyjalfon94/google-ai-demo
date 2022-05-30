@@ -9,7 +9,7 @@ The demo "Meme Generator" application stores images and allows the user to gener
 - [Google Cloud Datastore](https://cloud.google.com/datastore/)
 - [Google Cloud Vision API](https://cloud.google.com/vision/)
 - [Google Cloud Translate API](https://cloud.google.com/translate/)
-- [Google Cloud Vision API](https://cloud.google.com/text-to-speech)
+- [Google Cloud Talk-to-Speech API](https://cloud.google.com/text-to-speech)
 
 The demo application is hosted using [Google App Engine](https://cloud.google.com/appengine).
 
