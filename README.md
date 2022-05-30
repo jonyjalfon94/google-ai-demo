@@ -2,7 +2,7 @@
 
 In this repo you will find all the resources used during the "Demystifying AI on GCP" session which was part of the Own The Cloud event in 2022.
 
-During the talk we saw how we can build "smart applications" that interact with various Google Cloud AI services using the pre-trained models available through their APIs.
+During the talk we saw how we can build "smart applications" that interact with various Google Cloud AI services using the pre-trained models that are available through their APIs.
 
 The demo "Meme Generator" application stores images and allows the user to generate, translate and read the text from memes by using the following APIs through their client libraries:
 - [Google Cloud Storage](https://cloud.google.com/storage/)
