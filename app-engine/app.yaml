@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-service: sela-demo-5
+service: google-ai-demo
 runtime: python
 env: flex
 entrypoint: gunicorn -b :$PORT main:app
